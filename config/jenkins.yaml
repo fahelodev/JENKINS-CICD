@@ -1,0 +1,102 @@
+jenkins:
+  systemMessage: "Jenkins configurado automáticamente con Configuration as Code"
+  numExecutors: 2
+  scmCheckoutRetryCount: 3
+  mode: NORMAL
+  
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+        - id: "admin"
+          password: "${JENKINS_ADMIN_PASSWORD:-admin123}"
+  
+  authorizationStrategy:
+    globalMatrix:
+      permissions:
+        - "Overall/Administer:admin"
+        - "Overall/Read:authenticated"
+  
+  globalNodeProperties:
+    - envVars:
+        env:
+          - key: "DOCKER_HOST"
+            value: "unix:///var/run/docker.sock"
+  
+  nodes:
+    - permanent:
+        name: "docker-agent"
+        remoteFS: "/home/jenkins"
+        numExecutors: 2
+        labelString: "docker"
+        mode: NORMAL
+        launcher:
+          docker:
+            image: "jenkins/agent:latest"
+            network: "jenkins-network"
+            volumes:
+              - "/var/run/docker.sock:/var/run/docker.sock"
+              - "jenkins_home:/var/jenkins_home"
+
+tool:
+  git:
+    installations:
+      - name: "Default"
+        home: "git"
+        properties:
+          - installSource:
+              installers:
+                - gitToolInstaller:
+                    name: "git"
+                    home: "git"
+  
+  docker:
+    installations:
+      - name: "Docker"
+        home: "/usr/bin/docker"
+        properties:
+          - installSource:
+              installers:
+                - dockerInstaller:
+                    name: "Docker"
+                    home: "/usr/bin/docker"
+  
+  nodejs:
+    installations:
+      - name: "NodeJS 20"
+        home: "/usr/bin/node"
+        properties:
+          - installSource:
+              installers:
+                - nodeJSInstaller:
+                    name: "NodeJS 20"
+                    home: "/usr/bin/node"
+  
+  gradle:
+    installations:
+      - name: "Gradle Wrapper"
+        home: ""
+        properties:
+          - gradleWrapperProperty:
+              gradleVersion: "8.0"
+  
+  android:
+    installations:
+      - name: "Android SDK"
+        home: "/opt/android-sdk"
+        properties:
+          - installSource:
+              installers:
+                - androidSdkInstaller:
+                    name: "Android SDK"
+                    home: "/opt/android-sdk"
+  
+  # NOTA: Las herramientas iOS se configurarán en fases posteriores
+  # cuando se requiera soporte para builds iOS
+
+unclassified:
+  location:
+    url: "http://localhost:8080"
+  
+  gitHubConfiguration:
+    apiRateLimitChecker: ThrottleForNormalize 

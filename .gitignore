@@ -1,0 +1,55 @@
+# Archivos de configuración local
+.env
+.env.local
+.env.production
+
+# Directorios de datos de Jenkins
+jenkins_home/
+backups/
+logs/
+
+# Secretos y credenciales
+secrets/
+*.key
+*.pem
+*.crt
+*.p12
+
+# Archivos temporales
+*.tmp
+*.temp
+*.log
+
+# Archivos de Docker
+.dockerignore
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Archivos de backup
+*.bak
+*.backup
+
+# Archivos de lock
+*.lock
+
+# Directorios de node_modules (si se usan scripts de Node.js)
+node_modules/
+
+# Archivos de configuración local de Jenkins
+jenkins_home/workspace/
+jenkins_home/jobs/
+jenkins_home/plugins/
+jenkins_home/users/
+jenkins_home/updates/
+jenkins_home/war/
+jenkins_home/.ssh/
+jenkins_home/.gitconfig
+jenkins_home/.gitignore_global 
