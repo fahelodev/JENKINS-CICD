@@ -99,4 +99,22 @@ unclassified:
     url: "http://localhost:8080"
   
   gitHubConfiguration:
-    apiRateLimitChecker: ThrottleForNormalize 
+    apiRateLimitChecker: ThrottleForNormalize
+
+# Configuración de credenciales para Azure DevOps
+credentials:
+  system:
+    domainCredentials:
+      - credentials:
+          - usernamePassword:
+              scope: GLOBAL
+              id: "azure-devops-credentials"
+              username: "${AZURE_DEVOPS_USERNAME:-admin}"
+              password: "${AZURE_DEVOPS_PAT:-changeme}"
+              description: "Azure DevOps credentials for Git access"
+          
+          - string:
+              scope: GLOBAL
+              id: "azure-devops-npm-token"
+              secret: "${AZURE_DEVOPS_NPM_TOKEN:-changeme}"
+              description: "Azure DevOps NPM token for private registry" 

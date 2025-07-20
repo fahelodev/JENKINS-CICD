@@ -18,6 +18,14 @@ services:
       # Jenkins Configuration
       - JENKINS_OPTS=--httpPort=8080
       - JAVA_OPTS=-Djenkins.install.runSetupWizard=false
+      
+      # Azure DevOps Credentials
+      - AZURE_DEVOPS_USERNAME=${AZURE_DEVOPS_USERNAME}
+      - AZURE_DEVOPS_PAT=${AZURE_DEVOPS_PAT}
+      - AZURE_DEVOPS_NPM_TOKEN=${AZURE_DEVOPS_NPM_TOKEN}
+      
+      # Jenkins Admin Password
+      - JENKINS_ADMIN_PASSWORD=${JENKINS_ADMIN_PASSWORD}
     networks:
       - jenkins-network
 
