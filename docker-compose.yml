@@ -5,6 +5,15 @@ services:
     build: .
     container_name: jenkins-master
     restart: unless-stopped
+    # 🔧 CORREGIR PERMISOS AL INICIAR (como root)
+    user: root
+    command: >
+      sh -c "
+        chown -R jenkins:jenkins /var/jenkins_home/.gradle /var/jenkins_home/.pnpm-store /var/jenkins_home/.android &&
+        chown -R jenkins:jenkins /var/jenkins_config /var/jenkins_secrets /var/jenkins_logs &&
+        chown -R jenkins:jenkins /var/jenkins_home &&
+        su jenkins -c '/usr/bin/tini -- /usr/local/bin/jenkins.sh'
+      "
     ports:
       - "8080:8080"
       - "50000:50000"

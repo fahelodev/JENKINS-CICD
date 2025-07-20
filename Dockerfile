@@ -139,9 +139,20 @@ RUN pnpm config set store-dir /var/jenkins_home/.pnpm-store
 # 🐳 CONFIGURACIÓN DE DOCKER PARA JENKINS
 # =============================================================================
 
-# Crear grupo docker si no existe y agregar usuario jenkins
-RUN groupadd -g 999 docker || true && \
-    usermod -aG docker jenkins
+# Crear grupo staff (macOS) y agregar usuario jenkins
+RUN groupadd -g 20 staff || true && \
+    usermod -aG staff jenkins
+
+# =============================================================================
+# 🔐 CAMBIAR PROPIEDAD A JENKINS (SEGURIDAD)
+# =============================================================================
+
+# Cambiar propiedad de todos los directorios importantes al usuario jenkins
+RUN chown -R jenkins:jenkins /var/jenkins_home && \
+    chown -R jenkins:jenkins /var/jenkins_config && \
+    chown -R jenkins:jenkins /opt/android-sdk && \
+    chown -R jenkins:jenkins /usr/local/bin && \
+    chown -R jenkins:jenkins /usr/share/jenkins
 
 # Cambiar de vuelta al usuario jenkins
 USER jenkins
