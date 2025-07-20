@@ -84,7 +84,7 @@ El script `verify-tools.sh` verifica automáticamente:
 - Pigz
 
 ### Análisis
-- Bundletool, Java JDK 17+
+- Bundletool, Java JDK 21+
 
 ## 🚧 Excluido en Fase 1 (iOS)
 

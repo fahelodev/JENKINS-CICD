@@ -1,5 +1,5 @@
 jenkins:
-  systemMessage: "Jenkins configurado automáticamente con Configuration as Code"
+  systemMessage: "Jenkins configurado con Configuration as Code"
   numExecutors: 2
   scmCheckoutRetryCount: 3
   mode: NORMAL
@@ -9,7 +9,7 @@ jenkins:
       allowsSignup: false
       users:
         - id: "admin"
-          password: "${JENKINS_ADMIN_PASSWORD:-admin123}"
+          password: "${JENKINS_ADMIN_PASSWORD}"
   
   authorizationStrategy:
     globalMatrix:
@@ -22,99 +22,70 @@ jenkins:
         env:
           - key: "DOCKER_HOST"
             value: "unix:///var/run/docker.sock"
-  
-  nodes:
-    - permanent:
-        name: "docker-agent"
-        remoteFS: "/home/jenkins"
-        numExecutors: 2
-        labelString: "docker"
-        mode: NORMAL
-        launcher:
-          docker:
-            image: "jenkins/agent:latest"
-            network: "jenkins-network"
-            volumes:
-              - "/var/run/docker.sock:/var/run/docker.sock"
-              - "jenkins_home:/var/jenkins_home"
+          - key: "ANDROID_HOME"
+            value: "/opt/android-sdk"
+          - key: "ANDROID_SDK_ROOT"
+            value: "/opt/android-sdk"
+          - key: "JAVA_HOME"
+            value: "/usr/local/openjdk-21"
+          - key: "NODE_VERSION"
+            value: "20.12.0"
+          - key: "GRADLE_HOME"
+            value: "/opt/gradle"
+          - key: "GRADLE_VERSION"
+            value: "8.5"
 
-tool:
-  git:
-    installations:
-      - name: "Default"
-        home: "git"
-        properties:
-          - installSource:
-              installers:
-                - gitToolInstaller:
-                    name: "git"
-                    home: "git"
-  
-  docker:
-    installations:
-      - name: "Docker"
-        home: "/usr/bin/docker"
-        properties:
-          - installSource:
-              installers:
-                - dockerInstaller:
-                    name: "Docker"
-                    home: "/usr/bin/docker"
-  
-  nodejs:
-    installations:
-      - name: "NodeJS 20"
-        home: "/usr/bin/node"
-        properties:
-          - installSource:
-              installers:
-                - nodeJSInstaller:
-                    name: "NodeJS 20"
-                    home: "/usr/bin/node"
-  
-  gradle:
-    installations:
-      - name: "Gradle Wrapper"
-        home: ""
-        properties:
-          - gradleWrapperProperty:
-              gradleVersion: "8.0"
-  
-  android:
-    installations:
-      - name: "Android SDK"
-        home: "/opt/android-sdk"
-        properties:
-          - installSource:
-              installers:
-                - androidSdkInstaller:
-                    name: "Android SDK"
-                    home: "/opt/android-sdk"
-  
-  # NOTA: Las herramientas iOS se configurarán en fases posteriores
-  # cuando se requiera soporte para builds iOS
-
-unclassified:
-  location:
-    url: "http://localhost:8080"
-  
-  gitHubConfiguration:
-    apiRateLimitChecker: ThrottleForNormalize
-
-# Configuración de credenciales para Azure DevOps
 credentials:
   system:
     domainCredentials:
       - credentials:
           - usernamePassword:
               scope: GLOBAL
-              id: "azure-devops-credentials"
-              username: "${AZURE_DEVOPS_USERNAME:-admin}"
-              password: "${AZURE_DEVOPS_PAT:-changeme}"
-              description: "Azure DevOps credentials for Git access"
-          
+              id: "azure-devops-git"
+              username: "${AZURE_DEVOPS_USERNAME}"
+              password: "${AZURE_DEVOPS_PAT}"
+              description: "Azure DevOps Git credentials"
           - string:
               scope: GLOBAL
               id: "azure-devops-npm-token"
-              secret: "${AZURE_DEVOPS_NPM_TOKEN:-changeme}"
-              description: "Azure DevOps NPM token for private registry" 
+              secret: "${AZURE_DEVOPS_NPM_TOKEN}"
+              description: "Azure DevOps NPM registry token"
+          - string:
+              scope: GLOBAL
+              id: "firebase-token"
+              secret: "${FIREBASE_TOKEN}"
+              description: "Firebase CLI token"
+          - file:
+              scope: GLOBAL
+              id: "env-file-qa"
+              fileName: "envqa.txt"
+              secretBytes: "${ENV_FILE_QA_PATH}"
+              description: "Archivo de entorno para QA"
+          - file:
+              scope: GLOBAL
+              id: "env-file-uat"
+              fileName: "envuat.txt"
+              secretBytes: "${ENV_FILE_UAT_PATH}"
+              description: "Archivo de entorno para UAT"
+
+          - file:
+              scope: GLOBAL
+              id: "release-keystore-file"
+              fileName: "release.keystore"
+              secretBytes: "${RELEASE_KEYSTORE_PATH}"
+              description: "release.keystore (File credential con el archivo keystore)"
+          - string:
+              scope: GLOBAL
+              id: "release-keystore-password"
+              secret: "${RELEASE_KEYSTORE_PASSWORD}"
+              description: "release-keystore-password"
+          - string:
+              scope: GLOBAL
+              id: "release-key-alias"
+              secret: "${RELEASE_KEY_ALIAS}"
+              description: "release-key-alias"
+          - string:
+              scope: GLOBAL
+              id: "release-key-password"
+              secret: "${RELEASE_KEY_PASSWORD}"
+              description: "release-key-password" 

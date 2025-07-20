@@ -10,19 +10,36 @@ services:
       - "50000:50000"
     volumes:
       - jenkins_home:/var/jenkins_home
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock:rw
       - ./config:/var/jenkins_config
       - ./secrets:/var/jenkins_secrets
       - ./logs:/var/jenkins_logs
+      - /Users/arayaeduardo/Documents/esmax_devops/APP/.certificados/environment:/var/jenkins_env_files
     environment:
       # Jenkins Configuration
       - JENKINS_OPTS=--httpPort=8080
       - JAVA_OPTS=-Djenkins.install.runSetupWizard=false
       
+      # JCasC Configuration
+      - CASC_JENKINS_CONFIG=/var/jenkins_config/jenkins.yaml
+      
       # Azure DevOps Credentials
       - AZURE_DEVOPS_USERNAME=${AZURE_DEVOPS_USERNAME}
       - AZURE_DEVOPS_PAT=${AZURE_DEVOPS_PAT}
       - AZURE_DEVOPS_NPM_TOKEN=${AZURE_DEVOPS_NPM_TOKEN}
+      
+      # Firebase Configuration
+      - FIREBASE_TOKEN=${FIREBASE_TOKEN}
+      
+      # Environment Files
+      - ENV_FILE_QA_PATH=${ENV_FILE_QA_PATH}
+      - ENV_FILE_UAT_PATH=${ENV_FILE_UAT_PATH}
+      
+      # Android Keystore Configuration
+      - RELEASE_KEYSTORE_PATH=${RELEASE_KEYSTORE_PATH}
+      - RELEASE_KEYSTORE_PASSWORD=${RELEASE_KEYSTORE_PASSWORD}
+      - RELEASE_KEY_ALIAS=${RELEASE_KEY_ALIAS}
+      - RELEASE_KEY_PASSWORD=${RELEASE_KEY_PASSWORD}
       
       # Jenkins Admin Password
       - JENKINS_ADMIN_PASSWORD=${JENKINS_ADMIN_PASSWORD}

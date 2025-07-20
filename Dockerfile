@@ -1,4 +1,4 @@
-FROM jenkins/jenkins:lts-jdk17
+FROM jenkins/jenkins:lts-jdk21
 
 USER root
 
@@ -135,6 +135,14 @@ RUN pnpm config set store-dir /var/jenkins_home/.pnpm-store
 # Configurar CocoaPods cache (EXCLUIDO EN FASE 1)
 # RUN pod setup --silent
 
+# =============================================================================
+# 🐳 CONFIGURACIÓN DE DOCKER PARA JENKINS
+# =============================================================================
+
+# Crear grupo docker si no existe y agregar usuario jenkins
+RUN groupadd -g 999 docker || true && \
+    usermod -aG docker jenkins
+
 # Cambiar de vuelta al usuario jenkins
 USER jenkins
 
@@ -144,6 +152,16 @@ USER jenkins
 
 # Copiar configuración como código
 COPY config/jenkins.yaml /var/jenkins_config/jenkins.yaml
+
+# =============================================================================
+# 🔌 INSTALACIÓN AUTOMÁTICA DE PLUGINS
+# =============================================================================
+
+# Copiar lista de plugins
+COPY config/plugins.txt /usr/share/jenkins/ref/plugins.txt
+
+# Instalar plugins automáticamente
+RUN jenkins-plugin-cli --plugin-file /usr/share/jenkins/ref/plugins.txt
 
 # =============================================================================
 # 🌐 EXPONER PUERTOS

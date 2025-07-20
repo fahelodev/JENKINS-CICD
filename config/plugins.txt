@@ -1,0 +1,57 @@
+# 🔌 Plugins Esenciales para ESMax DevOps - Fase 1: Android
+# Este archivo se usa para instalación automática de plugins en Jenkins
+
+# =============================================================================
+# CORE PIPELINE (CRÍTICO)
+# =============================================================================
+workflow-aggregator:latest
+pipeline-stage-view:latest
+pipeline-utility-steps:latest
+build-timeout:latest
+timestamper:latest
+ws-cleanup:latest
+
+# =============================================================================
+# CONFIGURATION AS CODE (CRÍTICO)
+# =============================================================================
+configuration-as-code:latest
+
+# =============================================================================
+# GIT Y SCM (CRÍTICO)
+# =============================================================================
+git:latest
+github:latest
+github-branch-source:latest
+
+# =============================================================================
+# DOCKER (CRÍTICO)
+# =============================================================================
+docker-workflow:latest
+docker-plugin:latest
+
+# =============================================================================
+# BUILD TOOLS (IMPORTANTE)
+# =============================================================================
+gradle:latest
+maven-plugin:latest
+nodejs:latest
+
+# =============================================================================
+# SEGURIDAD (IMPORTANTE)
+# =============================================================================
+role-strategy:latest
+matrix-auth:latest
+credentials:latest
+ssh-credentials:latest
+
+# =============================================================================
+# REPORTING (ÚTIL)
+# =============================================================================
+junit:latest
+htmlpublisher:latest
+
+# =============================================================================
+# EXTRAS (OPCIONAL)
+# =============================================================================
+copyartifact:latest
+rebuild:latest 
